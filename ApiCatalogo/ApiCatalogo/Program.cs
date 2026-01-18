@@ -1,32 +1,51 @@
-using ApiCatalogo.Context;
+using APICatalogo.Filters;
+using APICatalogo.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using ApiCatalogo.Context;
+using ApiCatalogo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. SERVIÇOS
-// Substitua a linha antiga por tudo isso aqui:
-builder.Services.AddControllers()
-    .AddJsonOptions(options => 
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+// Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(ApiExceptionFilter));
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
+                    options.UseMySql(mySqlConnection,
+                    ServerVersion.AutoDetect(mySqlConnection)));
+
+builder.Services.AddScoped<ApiLoggingFilter>();
+
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+{
+    LogLevel = LogLevel.Information
+}));
 
 var app = builder.Build();
 
-// 2. PIPELINE
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(); 
-    app.UseSwaggerUI(); 
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();

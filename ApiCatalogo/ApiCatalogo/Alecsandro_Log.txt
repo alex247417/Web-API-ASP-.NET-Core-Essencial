@@ -42,3 +42,9 @@ Information: 0 - Application started. Press Ctrl+C to shut down.
 Information: 0 - Hosting environment: Development
 Information: 0 - Content root path: C:\Users\alex2\OneDrive\Documentos\Web API ASP .NET Core Essencial\ApiCatalogo\ApiCatalogo
 Information: 0 - Application is shutting down...
+Information: 14 - Now listening on: https://localhost:7132
+Information: 14 - Now listening on: http://localhost:5273
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: C:\Users\alex2\OneDrive\Documentos\Web API ASP .NET Core Essencial\ApiCatalogo\ApiCatalogo
+Information: 0 - Application is shutting down...

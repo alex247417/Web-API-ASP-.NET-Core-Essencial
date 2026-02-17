@@ -1,4 +1,4 @@
-﻿using APICatalogo.Context;
+﻿using ApiCatalogo.Context;
 
 namespace APICatalogo.Repositories;
 
@@ -32,9 +32,9 @@ public class UnitOfWork : IUnitOfWork
             return _categoriaRepo = _categoriaRepo ?? new CategoriaRepository(_context);
         }
     }
-    public void Commit()
+    public async Task CommitAsync()
     {
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public void Dispose()

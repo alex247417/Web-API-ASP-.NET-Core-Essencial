@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using ApiCatalogo.Context;
 using ApiCatalogo.DTOs.Mappings;
-using ApiCatalogo.Repositories;
+using APICatalogo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

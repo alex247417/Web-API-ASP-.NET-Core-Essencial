@@ -1,6 +1,7 @@
 ﻿using ApiCatalogo.DTOs;
 using APICatalogo.DTOs;
 using ApiCatalogo.Models;
+using ApiCatalogo.Pagination;
 using ApiCatalogo.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
@@ -33,10 +34,20 @@ public class ProdutosController : ControllerBase
         return Ok(produtosDto);
     }
 
-   [HttpGet]
-    public ActionResult<IEnumerable<ProdutoDTO>> Get()
+    [HttpGet("pagination")]
+    public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters)
     {
-        var produtos = _uof.ProdutoRepository.GetAll();
+        var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
+        
+        var produtosDto = _mapper.Map<IEnumerable<ProdutoDTO>>(produtos);
+
+        return Ok(produtosDto);
+    }
+
+   [HttpGet]
+    public ActionResult<IEnumerable<ProdutoDTO>> GetAsync()
+    {
+        var produtos = _uof.ProdutoRepository.GetAllAsync();
         if (produtos is null)
         {
             return NotFound();
@@ -48,9 +59,9 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpGet("{id}", Name = "ObterProduto")]
-    public ActionResult<ProdutoDTO> Get(int id)
+    public async Task<ActionResult<ProdutoDTO>> GetAsync(int id)
     {
-        var produto = _uof.ProdutoRepository.Get(p => p.ProdutoId == id);
+        var produto = _uof.ProdutoRepository.GetAsync(p => p.ProdutoId == id);
         if (produto is null)
         {
             return NotFound("Produto não encontrado...");

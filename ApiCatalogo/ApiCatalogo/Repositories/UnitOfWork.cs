@@ -1,13 +1,13 @@
-﻿using ApiCatalogo.Context;
+﻿using APICatalogo.Context;
 
-namespace ApiCatalogo.Repositories;
+namespace APICatalogo.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private IProdutoRepository? _ProdutoRepo;
-    private ICategoriaRepository? _CategoriaRepo;
-    public AppDbContext _context;
+    private IProdutoRepository? _produtoRepo;
+    private ICategoriaRepository? _categoriaRepo;
 
+    public AppDbContext _context;
     public UnitOfWork(AppDbContext context)
     {
         _context = context;
@@ -17,19 +17,21 @@ public class UnitOfWork : IUnitOfWork
     {
         get
         {
-          return _ProdutoRepo = _ProdutoRepo ?? new ProdutoRepository(_context);
+            return _produtoRepo = _produtoRepo ?? new ProdutoRepository(_context);
+            //if (_produtoRepo == null)
+            //{
+            //    _produtoRepo = new ProdutoRepository(_context);
+            //}
+            //return _produtoRepo;
         }
     }
-    
     public ICategoriaRepository CategoriaRepository
     {
         get
         {
-            return _CategoriaRepo = _CategoriaRepo ?? new CategoriaRepository(_context);
+            return _categoriaRepo = _categoriaRepo ?? new CategoriaRepository(_context);
         }
     }
-
-    
     public void Commit()
     {
         _context.SaveChanges();

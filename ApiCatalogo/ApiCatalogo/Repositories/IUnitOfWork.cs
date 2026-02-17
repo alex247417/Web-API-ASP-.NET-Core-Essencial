@@ -1,9 +1,8 @@
-﻿namespace ApiCatalogo.Repositories;
+﻿namespace APICatalogo.Repositories;
 
 public interface IUnitOfWork
 {
-    public IProdutoRepository ProdutoRepository { get; }
-    public ICategoriaRepository CategoriaRepository { get; }
-
-    void  Commit();
+    IProdutoRepository ProdutoRepository { get; }
+    ICategoriaRepository CategoriaRepository { get; }
+    void Commit();
 }

@@ -1,6 +1,6 @@
-﻿namespace ApiCatalogo.Pagination;
+﻿namespace APICatalogo.Pagination;
 
-public class PagedList<T> : List<T> where T : class
+public class PagedList<T>  : List<T> where T : class
 {
     public int CurrentPage { get; private set; }
     public int TotalPages { get; private set; }
@@ -16,7 +16,7 @@ public class PagedList<T> : List<T> where T : class
         PageSize = pageSize;
         CurrentPage = pageNumber;
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-        
+
         AddRange(items);
     }
 
@@ -27,7 +27,4 @@ public class PagedList<T> : List<T> where T : class
 
         return new PagedList<T>(items, count, pageNumber, pageSize);
     }
-    
-    
-
 }

@@ -6,6 +6,7 @@ using ApiCatalogo.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace APICatalogo.Controllers;
 
@@ -38,13 +39,25 @@ public class ProdutosController : ControllerBase
     public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters)
     {
         var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
-        
+
+        var metadata = new
+        {
+            produtos.TotalCount, 
+            produtos.PageSize,
+            produtos.CurrentPage,
+            produtos.TotalPages,
+            produtos.HasNext,
+            produtos.HasPrevious
+        };
+
+        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
+
         var produtosDto = _mapper.Map<IEnumerable<ProdutoDTO>>(produtos);
 
         return Ok(produtosDto);
     }
 
-   [HttpGet]
+    [HttpGet]
     public ActionResult<IEnumerable<ProdutoDTO>> GetAsync()
     {
         var produtos = _uof.ProdutoRepository.GetAllAsync();
@@ -52,9 +65,9 @@ public class ProdutosController : ControllerBase
         {
             return NotFound();
         }
-        
+
         var produtosDto = _mapper.Map<IEnumerable<ProdutoDTO>>(produtos);
-        
+
         return Ok(produtosDto);
     }
 
@@ -79,7 +92,7 @@ public class ProdutosController : ControllerBase
             return BadRequest();
 
         var produto = _mapper.Map<Produto>(produtoDto);
-        
+
         var novoProduto = _uof.ProdutoRepository.Create(produto);
         _uof.Commit();
 
@@ -130,7 +143,7 @@ public class ProdutosController : ControllerBase
         _uof.Commit();
 
         var produtoAtualizadoDto = _mapper.Map<ProdutoDTO>(produtoAtualizado);
-        
+
         return Ok(produtoAtualizadoDto);
     }
 
@@ -145,9 +158,9 @@ public class ProdutosController : ControllerBase
 
         var produtoDeletado = _uof.ProdutoRepository.Delete(produto);
         _uof.Commit();
-        
+
         var produtoDeletadoDto = _mapper.Map<ProdutoDTO>(produtoDeletado);
-        
+
         return Ok(produtoDeletadoDto);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ApiCatalogo.Context;
+using ApiCatalogo.Repositories;
 
 namespace APICatalogo.Repositories;
 
